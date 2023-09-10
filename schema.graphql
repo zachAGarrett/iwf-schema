@@ -1,0 +1,118 @@
+enum Class {
+  # Men's classes
+  M55
+  M61
+  M67
+  M73
+  M81
+  M89
+  M96
+  M102
+  M109
+  MP109
+
+  # Women's Classes
+  W45
+  W49
+  W55
+  W59
+  W64
+  W71
+  W76
+  W81
+  W87
+  WP87
+}
+
+type Athlete {
+  id: ID! @id
+  verified: Boolean! @default(value: FALSE)
+
+  familyName: String!
+  givenName: String!
+  birthday: Date!
+
+  attempts: [Attempt!]! @relationship(type: "MADE", direction: OUT)
+  dataSources: [DataSource!]! @relationship(type: "IN", direction: OUT)
+  events: [Event!]! @relationship(type: "DID", direction: OUT)
+  competitions: [Competition!]! @relationship(type: "DID", direction: OUT)
+  nations: [Nation!]! @relationship(type: "REPRESENTED", direction: OUT)
+}
+
+type Attempt {
+  id: ID! @id
+  verified: Boolean! @default(value: FALSE)
+
+  weight: Float!
+  successful: Boolean!
+
+  athlete: Athlete! @relationship(type: "MADE", direction: IN)
+  event: Event! @relationship(type: "DURING", direction: OUT)
+  nation: Nation! @relationship(type: "FOR", direction: OUT)
+}
+
+type Event {
+  id: ID! @id
+  verified: Boolean! @default(value: FALSE)
+
+  class: Class!
+
+  attempts: [Attempt!]! @relationship(type: "DURING", direction: IN)
+  athletes: [Athlete!]! @relationship(type: "DID", direction: IN)
+  competition: Competition! @relationship(type: "OF", direction: OUT)
+}
+
+type Competition {
+  id: ID! @id
+  verified: Boolean! @default(value: FALSE)
+
+  name: String!
+  date: Date!
+
+  events: [Event!]! @relationship(type: "OF", direction: IN)
+  dataSources: [DataSource!]! @relationship(type: "IN", direction: OUT)
+  athletes: [Athlete!]! @relationship(type: "DID", direction: IN)
+  city: City! @relationship(type: "IN", direction: OUT)
+  sports: [Sport!]! @relationship(type: "OF", direction: OUT)
+}
+
+type City {
+  id: ID! @id
+  verified: Boolean! @default(value: FALSE)
+
+  name: String!
+
+  city: City! @relationship(type: "IN", direction: IN)
+  nation: Nation! @relationship(type: "OF", direction: OUT)
+}
+
+type Nation {
+  id: ID! @id
+  verified: Boolean! @default(value: FALSE)
+
+  name: String
+  code: String! @unique
+
+  cities: [City!]! @relationship(type: "OF", direction: IN)
+  athletes: [Athlete!]! @relationship(type: "REPRESENTED", direction: IN)
+}
+
+type Sport {
+  id: ID! @id
+  verified: Boolean! @default(value: FALSE)
+
+  name: String! @unique
+
+  competitions: [Competition!]! @relationship(type: "OF", direction: IN)
+  athletes: [Athlete!]! @relationship(type: "DID", direction: IN)
+}
+
+type DataSource {
+  id: ID! @id
+  verified: Boolean! @default(value: FALSE)
+
+  name: String! @unique
+
+  athletes: [Athlete!]! @relationship(type: "IN", direction: IN)
+  competitions: [Competition!]! @relationship(type: "IN", direction: IN)
+}
