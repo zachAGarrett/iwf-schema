@@ -27,6 +27,8 @@ enum Class {
 type Athlete {
   id: ID! @id
   verified: Boolean! @default(value: FALSE)
+  createdAt: DateTime! @timestamp(operations: [CREATE])
+  updatedAt: DateTime! @timestamp(operations: [UPDATE])
 
   familyName: String!
   givenName: String!
@@ -42,6 +44,8 @@ type Athlete {
 type Attempt {
   id: ID! @id
   verified: Boolean! @default(value: FALSE)
+  createdAt: DateTime! @timestamp(operations: [CREATE])
+  updatedAt: DateTime! @timestamp(operations: [UPDATE])
 
   weight: Float!
   successful: Boolean!
@@ -54,6 +58,8 @@ type Attempt {
 type Event {
   id: ID! @id
   verified: Boolean! @default(value: FALSE)
+  createdAt: DateTime! @timestamp(operations: [CREATE])
+  updatedAt: DateTime! @timestamp(operations: [UPDATE])
 
   class: Class!
 
@@ -65,6 +71,8 @@ type Event {
 type Competition {
   id: ID! @id
   verified: Boolean! @default(value: FALSE)
+  createdAt: DateTime! @timestamp(operations: [CREATE])
+  updatedAt: DateTime! @timestamp(operations: [UPDATE])
 
   name: String!
   date: Date!
@@ -79,6 +87,8 @@ type Competition {
 type City {
   id: ID! @id
   verified: Boolean! @default(value: FALSE)
+  createdAt: DateTime! @timestamp(operations: [CREATE])
+  updatedAt: DateTime! @timestamp(operations: [UPDATE])
 
   name: String!
 
@@ -89,6 +99,8 @@ type City {
 type Nation {
   id: ID! @id
   verified: Boolean! @default(value: FALSE)
+  createdAt: DateTime! @timestamp(operations: [CREATE])
+  updatedAt: DateTime! @timestamp(operations: [UPDATE])
 
   name: String
   code: String! @unique
@@ -100,6 +112,8 @@ type Nation {
 type Sport {
   id: ID! @id
   verified: Boolean! @default(value: FALSE)
+  createdAt: DateTime! @timestamp(operations: [CREATE])
+  updatedAt: DateTime! @timestamp(operations: [UPDATE])
 
   name: String! @unique
 
@@ -110,6 +124,8 @@ type Sport {
 type DataSource {
   id: ID! @id
   verified: Boolean! @default(value: FALSE)
+  createdAt: DateTime! @timestamp(operations: [CREATE])
+  updatedAt: DateTime! @timestamp(operations: [UPDATE])
 
   name: String! @unique
 
