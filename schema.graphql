@@ -24,6 +24,13 @@ enum Class {
   WP87
 }
 
+interface CompetitionInNation @relationshipProperties {
+  createdAt: DateTime! @timestamp(operations: [CREATE])
+  updatedAt: DateTime! @timestamp(operations: [UPDATE])
+
+  city: String
+}
+
 type Athlete {
   id: ID! @id
   verified: Boolean! @default(value: false)
@@ -49,6 +56,7 @@ type Attempt {
 
   weight: Float!
   successful: Boolean!
+  dateTime: DateTime
 
   athlete: Athlete! @relationship(type: "MADE", direction: IN)
   event: Event! @relationship(type: "DURING", direction: OUT)
@@ -62,6 +70,7 @@ type Event {
   updatedAt: DateTime! @timestamp(operations: [UPDATE])
 
   class: Class!
+  date: Date
 
   attempts: [Attempt!]! @relationship(type: "DURING", direction: IN)
   athletes: [Athlete!]! @relationship(type: "DID", direction: IN)
@@ -80,20 +89,9 @@ type Competition {
   events: [Event!]! @relationship(type: "OF", direction: IN)
   dataSources: [DataSource!]! @relationship(type: "IN", direction: OUT)
   athletes: [Athlete!]! @relationship(type: "DID", direction: IN)
-  city: City! @relationship(type: "IN", direction: OUT)
+  nation: Nation!
+    @relationship(type: "IN", properties: "CompetitionInNation", direction: OUT)
   sports: [Sport!]! @relationship(type: "OF", direction: OUT)
-}
-
-type City {
-  id: ID! @id
-  verified: Boolean! @default(value: false)
-  createdAt: DateTime! @timestamp(operations: [CREATE])
-  updatedAt: DateTime! @timestamp(operations: [UPDATE])
-
-  name: String!
-
-  city: City! @relationship(type: "IN", direction: IN)
-  nation: Nation! @relationship(type: "OF", direction: OUT)
 }
 
 type Nation {
@@ -105,7 +103,8 @@ type Nation {
   name: String
   code: String! @unique
 
-  cities: [City!]! @relationship(type: "OF", direction: IN)
+  competitions: [Competition!]!
+    @relationship(type: "IN", properties: "CompetitionInNation", direction: IN)
   athletes: [Athlete!]! @relationship(type: "REPRESENTED", direction: IN)
 }
 
