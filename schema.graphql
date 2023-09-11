@@ -208,6 +208,11 @@ type Attempt {
   successful: Boolean!
 
   """
+  The number of the attempt by the athlete in the event.
+  """
+  number: Number!
+
+  """
   The date and time of the attempt.
   """
   dateTime: DateTime
