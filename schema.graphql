@@ -210,7 +210,7 @@ type Attempt {
   """
   The number of the attempt by the athlete in the event.
   """
-  number: Number!
+  number: Int!
 
   """
   The date and time of the attempt.
