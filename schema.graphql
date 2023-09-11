@@ -1,4 +1,7 @@
-enum Class {
+"""
+Enumeration of classes for men and women in a iwf competition.
+"""
+enum EventClass_IWF {
   # Men's classes
   M55
   M61
@@ -24,122 +27,451 @@ enum Class {
   WP87
 }
 
+"""
+Enumeration of event types for a weightlifting competition
+"""
+enum EventType_IWF {
+  Snatch
+  CleanJerk
+}
+
+"""
+Represents a relationship between a competition and a nation, with additional properties.
+"""
 interface CompetitionInNation @relationshipProperties {
+  """
+  The timestamp when this relationship was created.
+  """
   createdAt: DateTime! @timestamp(operations: [CREATE])
+
+  """
+  The timestamp when this relationship was last updated.
+  """
   updatedAt: DateTime @timestamp(operations: [UPDATE])
 
+  """
+  The city where the competition took place.
+  """
   city: String
 }
 
+"""
+Represents a relationship between a data source and an entity, with additional properties.
+"""
 interface DataSourceEdge @relationshipProperties {
+  """
+  The timestamp when this relationship was created.
+  """
   createdAt: DateTime! @timestamp(operations: [CREATE])
+
+  """
+  The timestamp when this relationship was last updated.
+  """
   updatedAt: DateTime @timestamp(operations: [UPDATE])
 
+  """
+  The unique identifier of the entity associated with the data source.
+  """
   entityId: String!
 }
 
-type Athlete {
-  id: ID! @id
-  verified: Boolean! @default(value: false)
+"""
+Represents a relationship between an athlete and an event, with additional properties.
+"""
+interface AthleteDidEvent @relationshipProperties {
+  """
+  The timestamp when this relationship was created.
+  """
   createdAt: DateTime! @timestamp(operations: [CREATE])
+
+  """
+  The timestamp when this relationship was last updated.
+  """
   updatedAt: DateTime @timestamp(operations: [UPDATE])
 
+  """
+  The bodyweight of the athlete when participating in the event.
+  """
+  bodyweight: Float!
+}
+
+"""
+The union of all event class enums in this schema
+"""
+union UnifiedEventClass = EventClass_IWF
+
+"""
+The union of all event type enums in this schema
+"""
+union UnifiedEventType = EventType_IWF
+
+"""
+Represents an athlete in the sports competition.
+"""
+type Athlete {
+  """
+  The unique identifier of the athlete.
+  """
+  id: ID! @id
+
+  """
+  Indicates whether the athlete's profile is verified.
+  """
+  verified: Boolean! @default(value: false)
+
+  """
+  The timestamp when the athlete's profile was created.
+  """
+  createdAt: DateTime! @timestamp(operations: [CREATE])
+
+  """
+  The timestamp when the athlete's profile was last updated.
+  """
+  updatedAt: DateTime @timestamp(operations: [UPDATE])
+
+  """
+  The family name of the athlete.
+  """
   familyName: String!
+
+  """
+  The given name of the athlete.
+  """
   givenName: String!
+
+  """
+  The birthday of the athlete.
+  """
   birthday: Date!
 
+  """
+  The list of attempts made by the athlete in various events.
+  """
   attempts: [Attempt!]! @relationship(type: "MADE", direction: OUT)
+
+  """
+  The list of data sources associated with the athlete.
+  """
   dataSources: [DataSource!]!
     @relationship(type: "IN", properties: "DataSourceEdge", direction: OUT)
+
+  """
+  The list of events in which the athlete participated.
+  """
   events: [Event!]! @relationship(type: "DID", direction: OUT)
+
+  """
+  The list of competitions in which the athlete participated.
+  """
   competitions: [Competition!]! @relationship(type: "DID", direction: OUT)
+
+  """
+  The list of nations represented by the athlete.
+  """
   nations: [Nation!]! @relationship(type: "REPRESENTED", direction: OUT)
 }
 
+"""
+Represents an attempt made by an athlete in an event.
+"""
 type Attempt {
+  """
+  The unique identifier of the attempt.
+  """
   id: ID! @id
+
+  """
+  Indicates whether the attempt is verified.
+  """
   verified: Boolean! @default(value: false)
+
+  """
+  The timestamp when the attempt was created.
+  """
   createdAt: DateTime! @timestamp(operations: [CREATE])
+
+  """
+  The timestamp when the attempt was last updated.
+  """
   updatedAt: DateTime @timestamp(operations: [UPDATE])
 
+  """
+  The weight lifted or achieved in the attempt.
+  """
   weight: Float!
+
+  """
+  Indicates whether the attempt was successful.
+  """
   successful: Boolean!
+
+  """
+  The date and time of the attempt.
+  """
   dateTime: DateTime
 
+  """
+  The athlete who made the attempt.
+  """
   athlete: Athlete! @relationship(type: "MADE", direction: IN)
+
+  """
+  The event in which the attempt was made.
+  """
   event: Event! @relationship(type: "DURING", direction: OUT)
+
+  """
+  The nation associated with the attempt.
+  """
   nation: Nation! @relationship(type: "FOR", direction: OUT)
 }
 
+"""
+Represents a sports event in the competition.
+"""
 type Event {
+  """
+  The unique identifier of the event.
+  """
   id: ID! @id
+
+  """
+  Indicates whether the event is verified.
+  """
   verified: Boolean! @default(value: false)
+
+  """
+  The timestamp when the event was created.
+  """
   createdAt: DateTime! @timestamp(operations: [CREATE])
+
+  """
+  The timestamp when the event was last updated.
+  """
   updatedAt: DateTime @timestamp(operations: [UPDATE])
 
-  class: Class!
+  """
+  The class of the event.
+  """
+  class: UnifiedEventClass!
+
+  """
+  The type of the event.
+  """
+  type: UnifiedEventType!
+
+  """
+  The date of the event.
+  """
   date: Date
 
+  """
+  The list of attempts made in this event.
+  """
   attempts: [Attempt!]! @relationship(type: "DURING", direction: IN)
+
+  """
+  The list of athletes who participated in this event.
+  """
   athletes: [Athlete!]! @relationship(type: "DID", direction: IN)
+
+  """
+  The competition to which this event belongs.
+  """
   competition: Competition! @relationship(type: "OF", direction: OUT)
 }
 
+"""
+Represents a sports competition.
+"""
 type Competition {
+  """
+  The unique identifier of the competition.
+  """
   id: ID! @id
+
+  """
+  Indicates whether the competition is verified.
+  """
   verified: Boolean! @default(value: false)
+
+  """
+  The timestamp when the competition was created.
+  """
   createdAt: DateTime! @timestamp(operations: [CREATE])
+
+  """
+  The timestamp when the competition was last updated.
+  """
   updatedAt: DateTime @timestamp(operations: [UPDATE])
 
+  """
+  The name of the competition.
+  """
   name: String!
+
+  """
+  The date of the competition.
+  """
   date: Date!
+
+  """
+  Indicates whether data for this competition has been scraped.
+  """
   scraped: Boolean! @default(value: false)
 
+  """
+  The list of events in this competition.
+  """
   events: [Event!]! @relationship(type: "OF", direction: IN)
+
+  """
+  The list of data sources associated with this competition.
+  """
   dataSources: [DataSource!]!
-    @relationship(type: "IN", properties: "DataSourceEdge", direction: OUT)
+    @relationship(type: "IN", properties: "DataSourceEdge", direction: IN)
+
+  """
+  The list of athletes who participated in this competition.
+  """
   athletes: [Athlete!]! @relationship(type: "DID", direction: IN)
+
+  """
+  The nation hosting the competition.
+  """
   nation: Nation!
     @relationship(type: "IN", properties: "CompetitionInNation", direction: OUT)
+
+  """
+  The list of sports associated with this competition.
+  """
   sports: [Sport!]! @relationship(type: "OF", direction: OUT)
 }
 
+"""
+Represents a nation or country.
+"""
 type Nation {
+  """
+  The unique identifier of the nation.
+  """
   id: ID! @id
+
+  """
+  Indicates whether the nation's profile is verified.
+  """
   verified: Boolean! @default(value: false)
+
+  """
+  The timestamp when the nation's profile was created.
+  """
   createdAt: DateTime! @timestamp(operations: [CREATE])
+
+  """
+  The timestamp when the nation's profile was last updated.
+  """
   updatedAt: DateTime @timestamp(operations: [UPDATE])
 
+  """
+  The name of the nation.
+  """
   name: String
+
+  """
+  The code representing the nation (e.g., ISO code).
+  """
   code: String! @unique
 
+  """
+  The list of competitions associated with this nation.
+  """
   competitions: [Competition!]!
     @relationship(type: "IN", properties: "CompetitionInNation", direction: IN)
+
+  """
+  The list of athletes representing this nation.
+  """
   athletes: [Athlete!]! @relationship(type: "REPRESENTED", direction: IN)
 }
 
+"""
+Represents a sports discipline or category.
+"""
 type Sport {
+  """
+  The unique identifier of the sport.
+  """
   id: ID! @id
+
+  """
+  Indicates whether the sport's profile is verified.
+  """
   verified: Boolean! @default(value: false)
+
+  """
+  The timestamp when the sport's profile was created.
+  """
   createdAt: DateTime! @timestamp(operations: [CREATE])
+
+  """
+  The timestamp when the sport's profile was last updated.
+  """
   updatedAt: DateTime @timestamp(operations: [UPDATE])
 
+  """
+  The name of the sport.
+  """
   name: String! @unique
 
+  """
+  The list of competitions associated with this sport.
+  """
   competitions: [Competition!]! @relationship(type: "OF", direction: IN)
+
+  """
+  The list of athletes who participated in this sport.
+  """
   athletes: [Athlete!]! @relationship(type: "DID", direction: IN)
 }
 
+"""
+Represents a data source for sports-related information.
+"""
 type DataSource {
+  """
+  The unique identifier of the data source.
+  """
   id: ID! @id
+
+  """
+  Indicates whether the data source's profile is verified.
+  """
   verified: Boolean! @default(value: false)
+
+  """
+  The timestamp when the data source's profile was created.
+  """
   createdAt: DateTime! @timestamp(operations: [CREATE])
+
+  """
+  The timestamp when the data source's profile was last updated.
+  """
   updatedAt: DateTime @timestamp(operations: [UPDATE])
 
+  """
+  The name of the data source.
+  """
   name: String! @unique
 
+  """
+  The list of athletes associated with this data source.
+  """
   athletes: [Athlete!]!
     @relationship(type: "IN", properties: "DataSourceEdge", direction: IN)
+
+  """
+  The list of competitions associated with this data source.
+  """
   competitions: [Competition!]!
     @relationship(type: "IN", properties: "DataSourceEdge", direction: IN)
 }
