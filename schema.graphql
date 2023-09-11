@@ -26,14 +26,14 @@ enum Class {
 
 interface CompetitionInNation @relationshipProperties {
   createdAt: DateTime! @timestamp(operations: [CREATE])
-  updatedAt: DateTime! @timestamp(operations: [UPDATE, CREATE])
+  updatedAt: DateTime @timestamp(operations: [UPDATE])
 
   city: String
 }
 
 interface DataSourceEdge @relationshipProperties {
   createdAt: DateTime! @timestamp(operations: [CREATE])
-  updatedAt: DateTime! @timestamp(operations: [UPDATE, CREATE])
+  updatedAt: DateTime @timestamp(operations: [UPDATE])
 
   entityId: String!
 }
@@ -42,7 +42,7 @@ type Athlete {
   id: ID! @id
   verified: Boolean! @default(value: false)
   createdAt: DateTime! @timestamp(operations: [CREATE])
-  updatedAt: DateTime! @timestamp(operations: [UPDATE, CREATE])
+  updatedAt: DateTime @timestamp(operations: [UPDATE])
 
   familyName: String!
   givenName: String!
@@ -60,7 +60,7 @@ type Attempt {
   id: ID! @id
   verified: Boolean! @default(value: false)
   createdAt: DateTime! @timestamp(operations: [CREATE])
-  updatedAt: DateTime! @timestamp(operations: [UPDATE, CREATE])
+  updatedAt: DateTime @timestamp(operations: [UPDATE])
 
   weight: Float!
   successful: Boolean!
@@ -75,7 +75,7 @@ type Event {
   id: ID! @id
   verified: Boolean! @default(value: false)
   createdAt: DateTime! @timestamp(operations: [CREATE])
-  updatedAt: DateTime! @timestamp(operations: [UPDATE, CREATE])
+  updatedAt: DateTime @timestamp(operations: [UPDATE])
 
   class: Class!
   date: Date
@@ -89,10 +89,11 @@ type Competition {
   id: ID! @id
   verified: Boolean! @default(value: false)
   createdAt: DateTime! @timestamp(operations: [CREATE])
-  updatedAt: DateTime! @timestamp(operations: [UPDATE, CREATE])
+  updatedAt: DateTime @timestamp(operations: [UPDATE])
 
   name: String!
   date: Date!
+  scraped: Boolean! @default(value: false)
 
   events: [Event!]! @relationship(type: "OF", direction: IN)
   dataSources: [DataSource!]!
@@ -107,7 +108,7 @@ type Nation {
   id: ID! @id
   verified: Boolean! @default(value: false)
   createdAt: DateTime! @timestamp(operations: [CREATE])
-  updatedAt: DateTime! @timestamp(operations: [UPDATE, CREATE])
+  updatedAt: DateTime @timestamp(operations: [UPDATE])
 
   name: String
   code: String! @unique
@@ -121,7 +122,7 @@ type Sport {
   id: ID! @id
   verified: Boolean! @default(value: false)
   createdAt: DateTime! @timestamp(operations: [CREATE])
-  updatedAt: DateTime! @timestamp(operations: [UPDATE, CREATE])
+  updatedAt: DateTime @timestamp(operations: [UPDATE])
 
   name: String! @unique
 
@@ -133,7 +134,7 @@ type DataSource {
   id: ID! @id
   verified: Boolean! @default(value: false)
   createdAt: DateTime! @timestamp(operations: [CREATE])
-  updatedAt: DateTime! @timestamp(operations: [UPDATE, CREATE])
+  updatedAt: DateTime @timestamp(operations: [UPDATE])
 
   name: String! @unique
 
