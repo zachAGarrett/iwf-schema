@@ -31,6 +31,13 @@ interface CompetitionInNation @relationshipProperties {
   city: String
 }
 
+interface DataSourceEdge @relationshipProperties {
+  createdAt: DateTime! @timestamp(operations: [CREATE])
+  updatedAt: DateTime! @timestamp(operations: [UPDATE])
+
+  entityId: String
+}
+
 type Athlete {
   id: ID! @id
   verified: Boolean! @default(value: false)
@@ -42,7 +49,8 @@ type Athlete {
   birthday: Date!
 
   attempts: [Attempt!]! @relationship(type: "MADE", direction: OUT)
-  dataSources: [DataSource!]! @relationship(type: "IN", direction: OUT)
+  dataSources: [DataSource!]!
+    @relationship(type: "IN", properties: "DataSourceEdge", direction: OUT)
   events: [Event!]! @relationship(type: "DID", direction: OUT)
   competitions: [Competition!]! @relationship(type: "DID", direction: OUT)
   nations: [Nation!]! @relationship(type: "REPRESENTED", direction: OUT)
@@ -87,7 +95,8 @@ type Competition {
   date: Date!
 
   events: [Event!]! @relationship(type: "OF", direction: IN)
-  dataSources: [DataSource!]! @relationship(type: "IN", direction: OUT)
+  dataSources: [DataSource!]!
+    @relationship(type: "IN", properties: "DataSourceEdge", direction: OUT)
   athletes: [Athlete!]! @relationship(type: "DID", direction: IN)
   nation: Nation!
     @relationship(type: "IN", properties: "CompetitionInNation", direction: OUT)
@@ -128,6 +137,8 @@ type DataSource {
 
   name: String! @unique
 
-  athletes: [Athlete!]! @relationship(type: "IN", direction: IN)
-  competitions: [Competition!]! @relationship(type: "IN", direction: IN)
+  athletes: [Athlete!]!
+    @relationship(type: "IN", properties: "DataSourceEdge", direction: IN)
+  competitions: [Competition!]!
+    @relationship(type: "IN", properties: "DataSourceEdge", direction: IN)
 }
