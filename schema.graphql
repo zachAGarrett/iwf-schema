@@ -76,9 +76,9 @@ interface DataSourceEdge @relationshipProperties {
 }
 
 """
-Represents a relationship between an athlete and an event, with additional properties.
+Represents a relationship between an athlete and an event or competition, with additional properties.
 """
-interface AthleteDidEvent @relationshipProperties {
+interface AthleteDid @relationshipProperties {
   """
   The timestamp when this relationship was created.
   """
@@ -93,6 +93,16 @@ interface AthleteDidEvent @relationshipProperties {
   The bodyweight of the athlete when participating in the event.
   """
   bodyweight: Float!
+
+  """
+  The ranking of the athlete at the conclusion of the event.
+  """
+  rank: Int
+
+  """
+  The group the athlete was placed in for the event.
+  """
+  group: String!
 }
 
 """
@@ -148,12 +158,14 @@ type Athlete {
   """
   The list of events in which the athlete participated.
   """
-  events: [Event!]! @relationship(type: "DID", direction: OUT)
+  events: [Event!]!
+    @relationship(type: "DID", properties: "AthleteDid", direction: OUT)
 
   """
   The list of competitions in which the athlete participated.
   """
-  competitions: [Competition!]! @relationship(type: "DID", direction: OUT)
+  competitions: [Competition!]!
+    @relationship(type: "DID", properties: "AthleteDid", direction: OUT)
 
   """
   The list of nations represented by the athlete.
