@@ -96,16 +96,6 @@ interface AthleteDidEvent @relationshipProperties {
 }
 
 """
-The union of all event class enums in this schema
-"""
-union UnifiedEventClass = EventClass_IWF
-
-"""
-The union of all event type enums in this schema
-"""
-union UnifiedEventType = EventType_IWF
-
-"""
 Represents an athlete in the sports competition.
 """
 type Athlete {
@@ -253,12 +243,12 @@ type Event {
   """
   The class of the event.
   """
-  class: UnifiedEventClass!
+  class: EventClass_IWF!
 
   """
   The type of the event.
   """
-  type: UnifiedEventType!
+  type: EventType_IWF!
 
   """
   The date of the event.
