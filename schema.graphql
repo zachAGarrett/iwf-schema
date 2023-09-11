@@ -130,14 +130,9 @@ type Athlete {
   updatedAt: DateTime @timestamp(operations: [UPDATE])
 
   """
-  The family name of the athlete.
+  The full name of the athlete. Recorded as parsed.
   """
-  familyName: String!
-
-  """
-  The given name of the athlete.
-  """
-  givenName: String!
+  name: String!
 
   """
   The birthday of the athlete.
