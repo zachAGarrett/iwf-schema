@@ -347,7 +347,8 @@ type Competition {
   """
   The list of athletes who participated in this competition.
   """
-  athletes: [Athlete!]! @relationship(type: "DID", direction: IN)
+  athletes: [Athlete!]!
+    @relationship(type: "DID", properties: "AthleteDid", direction: IN)
 
   """
   The nation hosting the competition.
