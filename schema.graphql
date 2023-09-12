@@ -3,28 +3,28 @@ Enumeration of classes for men and women in a iwf competition.
 """
 enum EventClass_IWF {
   # Men's classes
-  M55
-  M61
-  M67
-  M73
-  M81
-  M89
-  M96
-  M102
-  M109
-  MP109
+  M_55
+  M_61
+  M_67
+  M_73
+  M_81
+  M_89
+  M_96
+  M_102
+  M_109
+  M_P109
 
   # Women's Classes
-  W45
-  W49
-  W55
-  W59
-  W64
-  W71
-  W76
-  W81
-  W87
-  WP87
+  W_45
+  W_49
+  W_55
+  W_59
+  W_64
+  W_71
+  W_76
+  W_81
+  W_87
+  W_P87
 }
 
 """
@@ -275,7 +275,8 @@ type Event {
   """
   The list of athletes who participated in this event.
   """
-  athletes: [Athlete!]! @relationship(type: "DID", direction: IN)
+  athletes: [Athlete!]!
+    @relationship(type: "DID", properties: "AthleteDid", direction: IN)
 
   """
   The competition to which this event belongs.
