@@ -255,7 +255,17 @@ type Event {
   """
   The class of the event.
   """
-  class: EventClass_IWF!
+  class: EventClass_IWF
+
+  """
+  The weight class of the event
+  """
+  weightClass: String!
+
+  """
+  The gender class of the event
+  """
+  genderClass: String!
 
   """
   The type of the event.
